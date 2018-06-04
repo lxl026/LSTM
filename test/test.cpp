@@ -24,9 +24,13 @@ public:
 	TestFixture()
 	{
 		Wf1D = new double[row*col];
+		// f = new double[col];
+		// h = new double[row];
 	}
 	~TestFixture(){
 		delete[] Wf1D;
+		// delete[] f;
+		// delete[] h;
 	}
 
 	// Before each sample
@@ -73,18 +77,17 @@ public:
 		
 	}
 
-	double f[col];
+	double f[col];//陆谩鹿没
 	double h[row];
+	// double *f;
+	// double *h;
+
 	double Wf[row][col];
 
 	double WfT[col][row];
 
 	double* Wf1D;
 	double Wf1D2[col*row];
-
-	MatrixXd a1;
-	VectorXd input1;
-	VectorXd aa1;
 
 };
 
