@@ -1,27 +1,26 @@
 #include "test.h"
-#include "iostream"
-#include "string.h"
-#include "math.h"
-#include "stdlib.h"
-#include "time.h"
-#include "vector"
-#include "assert.h"
+#include <iostream>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+#include <time.h>
+#include <assert.h>
 #include "TimeCalcultion.h"
+#include "config.h"
 using namespace std;
 
-#define innode  2       //����������������2������
-#define hidenode  26    //���ؽ�������洢��Я��λ��?
-#define outnode  1      //���������������һ��Ԥ������?
-#define alpha  0.1      //ѧϰ����
-#define binary_dim 8    //������������󳤶�?
+#define innode  2       
+#define hidenode  26    
+#define outnode  1      
+#define alpha  0.1      
+#define binary_dim 8   
 
 #define randval(high) ( (double)rand() / RAND_MAX * high )
-#define uniform_plus_minus_one ( (double)( 2.0 * rand() ) / ((double)RAND_MAX + 1.0) - 1.0 )  //��������ֲ�?
+#define uniform_plus_minus_one ( (double)( 2.0 * rand() ) / ((double)RAND_MAX + 1.0) - 1.0 )  
 
+int largest_number = (pow(2, binary_dim));  
 
-int largest_number = (pow(2, binary_dim));  //����������󳤶ȶ�Ӧ�Ŀ��Ա�ʾ�����ʮ������
-
-											//��һ��10��������ת��Ϊ2������
+											
 void int2binary(int n, int *arr)
 {
 	int i = 0;
@@ -41,34 +40,34 @@ test::test()
 
 void test::fun()
 {
-	int nodeNum[1] = { 32 };
+	int nodeNum[1] = { 26 };
   char fileName[12];
   strcpy(fileName,"weight.csv");
 	Net testNet(8,2, nodeNum, 1, fileName);
 	TimeCalcultion timec;
-	for (int i = 0; i < 1000000; i++)
+	for (int i = 0; i < 100; i++)
 	{
-		int a_int = (int)randval(largest_number / 2.0);  //�������һ������?a
+		int a_int = (int)randval(largest_number / 2.0); 
 		int a[binary_dim];
-		int2binary(a_int, a);                 //תΪ��������
+		int2binary(a_int, a);                
 
-		int b_int = (int)randval(largest_number / 2.0);  //���������һ������?b
+		int b_int = (int)randval(largest_number / 2.0);  
 		int b[binary_dim];
-		int2binary(b_int, b);                 //תΪ��������
+		int2binary(b_int, b);               
 
 
-		int c_int = a_int + b_int;            //��ʵ�ĺ� c
+		int c_int = a_int + b_int;           
 		int c[binary_dim];
-		int2binary(c_int, c);                 //תΪ��������
+		int2binary(c_int, c);                
 
-		double input[8][1024];
+		double input[8][MAXPOINTNUM];
 		for (int j = 0; j < 8; j++)
 		{
 			input[j][0] = a[j];
 			input[j][1] = b[j];
 		}
 
-		double output[8][1024];
+		double output[8][MAXPOINTNUM];
 
 		timec.Start();
 		testNet.Predict(input,output);
@@ -87,7 +86,7 @@ void test::fun()
 		}
 		
 		int out = 0;
-		/*for (int k = binary_dim - 1; k >= 0; k--)
+		for (int k = binary_dim - 1; k >= 0; k--)
 			out += predict[k] * pow(2, k);
 
 		cout << "pred:";
@@ -101,7 +100,7 @@ void test::fun()
 		cout << endl;
 		
 		cout << a_int << " + " << b_int << " = " << out << endl;
-		*/
+		
 
 	}
 	timec.Show();

@@ -1,6 +1,6 @@
 #include "Net.h"
 
-Net::Net(int inputRow, int inputCol, int * nodeNum, int deepth, char* weightFileName)
+Net::Net(int inputRow, int inputCol, int * nodeNum, int deepth, char* weightFileName):inputRow(inputRow), inputCol(inputCol), deepth(deepth)
 {
 	this->inputRow = inputRow;
 	this->inputCol = inputCol;
@@ -24,22 +24,23 @@ void Net::GetWeigtParameter(char* weightFileName)
 	string line;
 	for (int i = 0; i < this->deepth; i++)
 	{
-		for (int j = 0; j < L[i].outputLen + L[i].inputLen; j++)//读取Wf
+		int c = L[i].outputLen + L[i].inputLen;
+		for (int j = 0; j < c; j++)//读取Wf
 		{
 			getline(fin, line);
 			istringstream sin(line); //将整行字符串line读入到字符串流istringstream中
 			string field;
 			int k = 0;
 			while(getline(sin, field, ','))
-			//for (int k = 0; k < L[i].outputLen; k++)
 			{
 				
 				stringstream ss;
 				ss << field;
-				ss >> L[i].Wf[j][k++];
+				ss >> L[i].Wf[k * c + j];
+				k++;
 			}
 		}
-		for (int j = 0; j < L[i].outputLen + L[i].inputLen; j++)//读取Wi
+		for (int j = 0; j < c; j++)
 		{
 			getline(fin, line);
 			istringstream sin(line); 
@@ -49,10 +50,11 @@ void Net::GetWeigtParameter(char* weightFileName)
 			{
 				stringstream ss;
 				ss << field;
-				ss >> L[i].Wi[j][k++];
+				ss >> L[i].Wi[k * c + j];
+				k++;
 			}
 		}
-		for (int j = 0; j < L[i].outputLen + L[i].inputLen; j++)//读取Wc
+		for (int j = 0; j < c; j++)//读取Wc
 		{
 			getline(fin, line);
 			istringstream sin(line);
@@ -62,10 +64,11 @@ void Net::GetWeigtParameter(char* weightFileName)
 			{
 				stringstream ss;
 				ss << field;
-				ss >> L[i].Wc[j][k++];
+				ss >> L[i].Wc[k * c + j];
+				k++;
 			}
 		}
-		for (int j = 0; j < L[i].outputLen + L[i].inputLen; j++)//读取Wo
+		for (int j = 0; j < c; j++)//读取Wo
 		{
 			getline(fin, line);
 			istringstream sin(line); 
@@ -75,7 +78,8 @@ void Net::GetWeigtParameter(char* weightFileName)
 			{
 				stringstream ss;
 				ss << field;
-				ss >> L[i].Wo[j][k++];
+				ss >> L[i].Wo[k * c + j];
+				k++;
 			}
 		}
 	}
@@ -83,7 +87,7 @@ void Net::GetWeigtParameter(char* weightFileName)
 	
 }
 
-void Net::Predict(double(*inputMatrix)[MAXINPUTLEN], double(*outputtMatrix)[MAXINPUTLEN])
+void Net::Predict(double(*inputMatrix)[MAXPOINTNUM], double(*outputtMatrix)[MAXPOINTNUM])
 {
 
 	for (int i = 0; i < inputRow; i++)
